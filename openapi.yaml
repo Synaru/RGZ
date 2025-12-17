@@ -1,0 +1,86 @@
+definitions: {}
+info:
+  description: API для управления телефонными контактами
+  termsOfService: /tos
+  title: Phone Contacts API
+  version: 0.0.1
+paths:
+  /contacts:
+    post:
+      description: Создание нового контакта
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            email:
+              example: email@email.com
+              type: string
+            name:
+              example: Имя Фамилия
+              type: string
+            phone:
+              example: +7-9XX-XX-XX
+              type: string
+          required:
+          - name
+          - phone
+          type: object
+      responses:
+        '201':
+          description: Контакт успешно создан
+          examples:
+            application/json:
+              email: email@email.com
+              id: 1
+              name: Имя Фамилия
+              phone: +7-9XX-XX-XX
+        '400':
+          description: Неверные данные
+      summary: Создание нового контакта
+      tags:
+      - Contacts
+  /contacts/{contact_id}:
+    delete:
+      description: Удаление контакта по ID
+      parameters:
+      - description: ID контакта
+        in: path
+        name: contact_id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Контакт успешно удален
+          examples:
+            application/json:
+              message: Контакт удален
+        '404':
+          description: Контакт не найден
+      summary: Удаление контакта по ID
+      tags:
+      - Contacts
+    get:
+      description: Получение информации о контакте по ID
+      parameters:
+      - description: ID контакта
+        in: path
+        name: contact_id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: Информация о контакте
+          examples:
+            application/json:
+              email: ivan@example.com
+              id: 1
+              name: Иван Иванов
+              phone: '+79991234567'
+        '404':
+          description: Контакт не найден
+      summary: Получение контакта по ID
+      tags:
+      - Contacts
+swagger: '2.0'
