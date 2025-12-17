@@ -1,0 +1,65 @@
+name: Generate and Deploy Documentation
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Шаг 1: Получаем код из репозитория
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    # Шаг 2: Устанавливаем Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    # Шаг 3: Устанавливаем зависимости Python
+    - name: Install Python dependencies
+      run: |
+        pip install flask flasgger pyyaml bandit
+    
+    # Шаг 4: Проверка безопасности с помощью Bandit
+    - name: Run Bandit Security Check
+      run: bandit -r app.py
+    
+    # Шаг 5: Запускаем приложение в фоне и генерируем OpenAPI спецификацию
+    - name: Generate OpenAPI Specification
+      run: |
+        # Создаем директорию для документации
+        mkdir -p docs
+        
+        # Генерируем OpenAPI спецификацию
+        python generate_openapi.py
+        
+        # Проверяем, что файл создан
+        ls -la docs/
+    
+    # Шаг 6: Устанавливаем Node.js
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    
+    # Шаг 7: Устанавливаем Redocly
+    - name: Install Redocly
+      run: |
+        npm i -g @redocly/cli@latest
+    
+    # Шаг 8: Генерируем документацию с помощью Redocly
+    - name: Generate Redoc Documentation
+      run: |
+        redocly build-docs docs/openapi.yaml --output docs/index.html
+    
+    # Шаг 9: Развертываем документацию на GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+        publish_branch: gh-pages
