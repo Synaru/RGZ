@@ -74,10 +74,10 @@ paths:
           description: Информация о контакте
           examples:
             application/json:
-              email: ivan@example.com
+              email: email@email.com
               id: 1
-              name: Иван Иванов
-              phone: '+79991234567'
+              name: Имя Фамилия
+              phone: +7-9XX-XX-XX
         '404':
           description: Контакт не найден
       summary: Получение контакта по ID
