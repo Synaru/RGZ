@@ -97,9 +97,9 @@ def create_contact():
             'examples': {
                 'application/json': {
                     'id': 1,
-                    'name': 'Иван Иванов',
-                    'phone': '+79991234567',
-                    'email': 'ivan@example.com'
+                    'name': 'Имя Фамилия',
+                    'phone': '+7-9XX-XX-XX',
+                    'email': 'email@email.com'
                 }
             }
         },
